@@ -124,12 +124,15 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
 # Swoole EXTENSION
 ###########################################################################
 
+ADD ./swoole-src /usr/local/ext/swoole-src
+
 ARG INSTALL_SWOOLE=false
 
 RUN if [ ${INSTALL_SWOOLE} = true ]; then \
     # Install Php Swoole Extension
-    pecl install swoole \
-    &&  docker-php-ext-enable swoole \
+    cd /usr/local/ext/swoole-src \
+    && sh ./make.sh \
+    && docker-php-ext-enable swoole \
 ;fi
 
 ###########################################################################
