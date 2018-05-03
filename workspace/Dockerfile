@@ -287,10 +287,13 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
 
 ARG INSTALL_SWOOLE=false
 ARG PHP_VERSION=${PHP_VERSION}
+ADD ./swoole-src /usr/local/ext/swoole-src
 
 RUN if [ ${INSTALL_SWOOLE} = true ]; then \
     # Install Php Swoole Extension
-    pecl -q install swoole && \
+    # pecl -q install swoole && \
+    cd /usr/local/ext/swoole-src && \
+    sh ./make.sh && \
     echo "extension=swoole.so" >> /etc/php/${PHP_VERSION}/mods-available/swoole.ini && \
     ln -s /etc/php/${PHP_VERSION}/mods-available/swoole.ini /etc/php/${PHP_VERSION}/cli/conf.d/20-swoole.ini \
 ;fi
